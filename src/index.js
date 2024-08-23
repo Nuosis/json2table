@@ -33,4 +33,4 @@ window.displayJson = (json) => {
 };
 
 console.log("version 1.0.2","FUNCTIONS: displayJson","OUTPUT: calls script displayJson * callback")
-displayJson(json)
+//displayJson(json)
