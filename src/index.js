@@ -1,7 +1,6 @@
-import JsonTable from "./JsonTable";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import json from "./data.json"
+import App from "./App";
 
 function jsonPrep(json){
   console.log("jsonPrep Init...",{json})
@@ -16,21 +15,19 @@ function jsonPrep(json){
   }
 }
 
-window.displayJson = (json) => {
+window.loadApp = (json) => {
   let data
   // Check if json is a string
   if (typeof json == 'string') {
-    
     data = jsonPrep(json)
   } else {
     data = json
   }
-  console.log("displayJson Init...",{data})
+  console.log("App Init...",{data})
 
   const container = document.getElementById("root");
   const root = createRoot(container);
-  root.render(<JsonTable json={data} />);
+  root.render(<App json={data} />);
 };
 
-console.log("version 1.0.2","FUNCTIONS: displayJson","OUTPUT: calls script displayJson * callback")
-//displayJson(json)
+console.log("version 1.0.2",{FUNCTIONS: [{Name: "loadApp",props: [{path: "displayJson", json: "{data: [{theJsonDataToDisplay}], settings: {hide:['keys to hid']}"},{path: "readMe"}]}]})
