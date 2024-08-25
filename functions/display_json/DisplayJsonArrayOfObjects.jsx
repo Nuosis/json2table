@@ -6,8 +6,9 @@ import { sendToFilemaker, validateIsArrayofObjects } from "./utils";
 import handleSettings from "./settings"
 
 
-const DisplayJson = ({ json }) => {
-  console.log("JsonTable Init...");
+const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
+  console.log("JsonTable Init...",{json});
+  console.log(obj)
   //safety check
   if(!json){
     return(
@@ -16,19 +17,18 @@ const DisplayJson = ({ json }) => {
   }
 
   //set variables/state
-  const d = json.data;
-  const settings = json.settings;
+  const d = json.json;
+  const settings = json.settings
   const [searchValue, setSearchValue] = useState(settings.initialSearch?settings.initialSearch:"");
   const [filteredData, setFilteredData] = useState([]);
-  const [prefersDarkMode, setPrefersDarkMode] = useState(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   //CUSTOM CSS
   const searchDiv = {
     position: 'sticky',
     top: '0',
     right: '0',
-    backgroundColor: prefersDarkMode ? '#000000' : 'White', // Dark mode background color
-    color: prefersDarkMode ? 'white' : 'black',  // Adjust text color for dark mode
+    backgroundColor: darkMode ? '#000000' : 'White', // Dark mode background color
+    color: darkMode ? 'white' : 'black',  // Adjust text color for dark mode
     zIndex: 10,
     display: 'flex',
     justifyContent: 'flex-end',
@@ -43,8 +43,9 @@ const DisplayJson = ({ json }) => {
     )
   }
 
-  // Extract fieldData from each record
-  const data = React.useMemo(() => d.map(record => record.fieldData), [d]);
+  // Extract OBJECT from each record
+  const data = React.useMemo(() => d.map(record => record[obj]), [d, obj]);
+
 
   // Ensure data array is not empty after extraction
   if(!validateIsArrayofObjects(data).isValid){
@@ -66,24 +67,6 @@ const DisplayJson = ({ json }) => {
     setFilteredData(filtered);
   }, [searchValue, data]);
 
-  //LISTEN FOR DARK MODE
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    // Define a handler to update state when the preference changes
-    const handleChange = (e) => {
-      setPrefersDarkMode(e.matches);
-    };
-
-    // Add event listener for changes to the media query
-    mediaQuery.addEventListener('change', handleChange);
-
-    // Cleanup listener on component unmount
-    return () => {
-      mediaQuery.removeEventListener('change', handleChange);
-    };
-  }, []);
-
   // Render the table
   return (
     <div className="h-screen" >
@@ -96,15 +79,15 @@ const DisplayJson = ({ json }) => {
             value = {searchValue}
             placeholder="Search..." 
             useData={(e) => setSearchValue(e.target.value)} 
-            darkMode ={prefersDarkMode}
+            darkMode ={darkMode}
           />
         </div>
       </div>
       <div id="2" className="flex-grow overflow-auto">
-        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={prefersDarkMode}/>
+        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode}/>
       </div>
     </div>
   );
 };
 
-export default DisplayJson;
+export default DisplayJsonArrayOfObjects;

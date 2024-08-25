@@ -1,0 +1,62 @@
+[
+  {
+    "customers": {
+      "name": "John Doe",
+      "emails": ["john.doe@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Jane Smith",
+      "emails": ["jane.smith@example.com", "jane.smith.work@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Alice Johnson",
+      "emails": ["alice.johnson@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Bob Brown",
+      "emails": ["bob.brown@example.com", "bob.brown.sales@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Charlie Davis",
+      "emails": ["charlie.davis@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Diana Evans",
+      "emails": ["diana.evans@example.com", "diana.evans.personal@example.com", "diana.evans.work@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Eve Foster",
+      "emails": ["eve.foster@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Frank Green",
+      "emails": ["frank.green@example.com", "frank.green.admin@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Grace Hill",
+      "emails": ["grace.hill@example.com"]
+    }
+  },
+  {
+    "customers": {
+      "name": "Henry Ivy",
+      "emails": ["henry.ivy@example.com", "henry.ivy.sales@example.com"]
+    }
+  }
+]

@@ -2,6 +2,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import data from "./data.json"
+import data2 from "./data2.json"
+
 
 function jsonPrep(json){
   console.log("jsonPrep Init...",{json})
@@ -57,4 +59,5 @@ console.log("version 1.0.2", {
   ]
 });
 
-loadApp({path:"displayJson", json: data, settings:{hide:["_","~","f_","E16","OBSI","db"],initialSearch:'',sortOrder:["Name","Email","phone"],format:[{key:"chargeRate",style:"currency"},{key:"fundsAvailable",style:"currency"}]}})
+//loadApp({path:"[0]fieldData", json:data, settings:{hide:["_","~","f_","E16","OBSI","db"],initialSearch:'',sortOrder:["Name","Email","phone"],format:[{key:"chargeRate",style:"currency"},{key:"fundsAvailable",style:"currency"}]}})
+loadApp({path:"[0]customers", json:data2, settings:{sortOrder:["Name","Email"]}})
