@@ -31,5 +31,30 @@ window.loadApp = (json) => {
   root.render(<App json={data} />);
 };
 
-console.log("version 1.0.2",{FUNCTIONS: [{Name: "loadApp",props: [{path: "displayJson", json: "{data: [{theJsonDataToDisplay}], settings: {hide:['keys to hid']}"},{path: "readMe"}]}]})
-loadApp({path:"displayJson", json: data, settings:{hide:["_","~","f_"]}})
+console.log("version 1.0.2", {
+  FUNCTIONS: [
+    {
+      Name: "loadApp",
+      props: [
+        {
+          path: "displayJson",
+          json: {
+            data: [{ /* theJsonDataToDisplay */ }],
+            settings: {
+              hide: ['keys to hide'],
+              sortOrder: ['keys in desired order'],
+              initialSearch: 'search term',
+              format: [{key:'keys to format',style:'currency$,decimal2,dateYYYY-MM-DD'}],
+            },
+            sortAble: ['keys to make sortable']
+          }
+        },
+        {
+          path: "readMe"
+        }
+      ]
+    }
+  ]
+});
+
+loadApp({path:"displayJson", json: data, settings:{hide:["_","~","f_","E16","OBSI","db"],initialSearch:'',sortOrder:["Name","Email","phone"],format:[{key:"chargeRate",style:"currency"},{key:"fundsAvailable",style:"currency"}]}})

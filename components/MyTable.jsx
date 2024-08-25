@@ -6,7 +6,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-const MyTable = ({ data, columns, callback }) => {
+const MyTable = ({ data, columns, callback, darkMode=false }) => {
   const table = useReactTable({
     data,
     columns,
@@ -29,12 +29,15 @@ const MyTable = ({ data, columns, callback }) => {
               <th
                 key={header.id}
                 style={{
-                  borderBottom: '2px solid #e2e8f0',
-                  background: '#cbd5e0',
-                  color: '#4a5568',
+                  position: 'sticky',
+                  top: 53,
+                  borderBottom: darkMode ? '2px solid #000000' : '2px solid #e2e8f0', // Conditional border color
+                  background: darkMode ? '#4a5568' : '#cbd5e0', // Dark mode background
+                  color: darkMode ? '#e2e8f0' : '#4a5568', // Dark mode text color
                   fontWeight: '600',
                   textAlign: 'left',
                   padding: '10px',
+                  zIndex: 5
                 }}
               >
                 {flexRender(header.column.columnDef.header, header.getContext())}
@@ -47,7 +50,11 @@ const MyTable = ({ data, columns, callback }) => {
         {table.getRowModel().rows.map(row => (
           <tr 
             key={row.id} 
-            style={{ background: row.id % 2 ? '#f7fafc' : '#ffffff' }}
+            style={{ 
+              background: darkMode 
+                ? (row.id % 2 ? '#1a1a1a' : '#000000') // Dark mode alternating row colors
+                : (row.id % 2 ? '#f7fafc' : '#ffffff'), // Light mode alternating row colors
+            }}
             onClick={() => handleRowClick(row)} 
           >
             {row.getVisibleCells().map(cell => (
@@ -55,8 +62,8 @@ const MyTable = ({ data, columns, callback }) => {
                 key={cell.id}
                 style={{
                   padding: '10px',
-                  borderBottom: '1px solid #e2e8f0',
-                  color: '#2d3748',
+                  borderBottom: darkMode ? '1px solid #000000' : '2px solid #e2e8f0',
+                  color: darkMode ? '#cbd5e0' : '#2d3748',
                 }}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
