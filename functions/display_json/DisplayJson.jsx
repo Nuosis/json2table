@@ -27,7 +27,7 @@ const DisplayJson = ({ json }) => {
     position: 'sticky',
     top: '0',
     right: '0',
-    backgroundColor: prefersDarkMode ? '#1a202c' : 'White', // Dark mode background color
+    backgroundColor: prefersDarkMode ? '#000000' : 'White', // Dark mode background color
     color: prefersDarkMode ? 'white' : 'black',  // Adjust text color for dark mode
     zIndex: 10,
     display: 'flex',

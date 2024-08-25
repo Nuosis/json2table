@@ -1,7 +1,6 @@
-import { toTitleCase, formatCellValue } from './utils'; // Import your utility functions
+import { toTitleCase, formatCellValue } from './utils'; // Assuming these utility functions are in utils.js
 
-export default handleSettings = (data, settings) => {
-  // Provide default values for settings to prevent errors
+export default function handleSettings(data, settings) {
   const { hide = [], sortOrder = [], format = [] } = settings;
 
   // Create a lookup map for formatting
@@ -27,7 +26,7 @@ export default handleSettings = (data, settings) => {
         const value = info.getValue();
         const formatStyle = formatMap[key];
         return formatCellValue(value, formatStyle);
-      }
+      },
     }));
 
   // Step 3: Include the remaining columns that weren't specified in `sortOrder`
@@ -41,7 +40,7 @@ export default handleSettings = (data, settings) => {
         const value = info.getValue();
         const formatStyle = formatMap[key];
         return formatCellValue(value, formatStyle);
-      }
+      },
     }));
 
   // Combine orderedColumns with remainingColumns
@@ -59,4 +58,4 @@ export default handleSettings = (data, settings) => {
   }
 
   return finalColumns;
-};
+}
