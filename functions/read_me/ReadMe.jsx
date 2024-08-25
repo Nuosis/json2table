@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 /**
  * ReadMe Component
@@ -23,14 +21,11 @@ import remarkGfm from 'remark-gfm';
  * ```
  */
 
-const ReadMe = ({ content }) => {
+const ReadMe = () => {
   return (
-    <div className="markdown-body">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {content}
-      </ReactMarkdown>
-    </div>
+    <>
+      <div>READ ME</div>
+    </>
   );
 };
-
 export default ReadMe;

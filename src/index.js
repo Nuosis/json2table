@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import data from "./data.json"
 
 function jsonPrep(json){
   console.log("jsonPrep Init...",{json})
@@ -31,3 +32,4 @@ window.loadApp = (json) => {
 };
 
 console.log("version 1.0.2",{FUNCTIONS: [{Name: "loadApp",props: [{path: "displayJson", json: "{data: [{theJsonDataToDisplay}], settings: {hide:['keys to hid']}"},{path: "readMe"}]}]})
+loadApp({path:"displayJson", json: data, settings:{hide:["_","~","f_"]}})

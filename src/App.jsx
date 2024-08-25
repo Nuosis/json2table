@@ -1,6 +1,9 @@
 import React from "react";
-import DisplayJson from "../functions/DisplayJson"
-//readMe
+import Alert from "../components/Alert";
+import DisplayJson from "../functions/display_json/DisplayJson"
+import ReadMe from "../functions/read_me/ReadMe"
+
+
 
 /**
  * App Component
@@ -35,16 +38,26 @@ import DisplayJson from "../functions/DisplayJson"
  * ```
  */
 
-const App = ({ path, data }) => {
+const App = ({json}) => {
+  console.log("loading...",{json})
+  const path=json.path
+  const data=json.json
+  const settings=json.settings
   switch (path) {
     case "displayJson":
       console.log("displayJson called...", { data });
-      return <DisplayJson json={data} />;
+      return <DisplayJson json={{data,settings}} />;
     case "readMe":
       console.log("readMe called...");
       return <ReadMe />;
     default:
-      return null; // Return null or handle other cases as needed
+      return (
+        <Alert 
+          title="Dev Error" 
+          dialog={`${path} is either undefined or unknown.` }
+          actionText="OK" 
+        />
+      );
   }
 };
 

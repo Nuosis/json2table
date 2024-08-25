@@ -1,10 +1,8 @@
-'use client'
-
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
-export default function ModalAlert(title,dialog,actionText) {
+export default function ModalAlert({title,dialog,actionText}) {
   const [open, setOpen] = useState(true)
 
   return (
