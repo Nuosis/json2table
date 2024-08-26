@@ -1,6 +1,3 @@
-import React from 'react';
-import Alert from '../../components/Alert.jsx';
-
 const sendToFilemaker = (row) => {
   const scriptName = "displayJson * callback";
   const scriptParameter = JSON.stringify({ row });

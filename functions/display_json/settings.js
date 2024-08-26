@@ -1,7 +1,22 @@
 import { toTitleCase, formatCellValue } from './utils';
 import { FaEllipsisV } from 'react-icons/fa';
+import { assessJsonStructure } from '../../src/utils';
 
 //HELPER FUNCTIONS
+const getValuePath = (value, key) => {
+  // Use the assessJsonStructure function to determine the structure of the value
+  const structure = assessJsonStructure(value);
+
+  // Return the appropriate path based on the structure
+  switch (structure) {
+    case 'array':
+      return '[0]'; // For arrays, return "[0]"
+    case 'object':
+      return '{}'; // For objects, return "{}"
+    default:
+      return `[0]${key}`; // For anything else, return "[0]" followed by the key
+  }
+};
 //Helper function to create column definitions
 const createColumnDef = (key, formatStyle, onRenderUnderRow) => ({
   id: key,
@@ -24,7 +39,7 @@ const createColumnDef = (key, formatStyle, onRenderUnderRow) => ({
             }}
             onClick={(e) => {
               e.stopPropagation(); // Prevent row click from being triggered
-              const path = '[0]'&&{key};
+              const path = getValuePath(value,key);
               console.log({path})
               onRenderUnderRow({ path, json: value });
             }}

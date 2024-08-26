@@ -93,11 +93,6 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
       </div>
       <div id="2" className="flex-grow overflow-auto">
         <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode} />
-        {subRowData && (
-          <div style={{ paddingLeft: '20px', marginTop: '10px', borderTop: '1px solid gray' }}>
-            <App json={{ path: subRowData.path, json: subRowData.json }} />
-          </div>
-        )}
       </div>
     </div>
   );

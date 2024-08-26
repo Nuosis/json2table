@@ -5,9 +5,9 @@ import { FaEllipsisV } from 'react-icons/fa';
 const setArrayColumns = (obj, onRenderUnderRow) => {
   return [
     {
-      id: 'value', // A single column since it's an array
+      id: 'id', // A single column since it's an array
       header: obj?obj:'Values', // General name of the header
-      accessorKey: obj, // Since we have mixed types, just return the row itself
+      accessorKey: obj?obj:'Values', // Since we have mixed types, just return the row itself
       cell: info => {
         const value = info.getValue();
         let displayValue;

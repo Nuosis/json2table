@@ -7,8 +7,13 @@ import { sendToFilemaker, validateIsArray, toTitleCase } from "./utils";
 import setArrayColumns from './setArrayColumns';
 
 const transformArrayToObjects = (array, key) => {
-  return array.map(item => ({ [key]: item }));
+  const k = key ? key : "Values";
+  return array.map((item, index) => ({
+    id: index + 1,  // Adding an id key with the value being the index (starting from 1)
+    [k]: item
+  }));
 };
+
 
 const DisplayJsonArray = ({ json, darkMode, strng }) => {
   const obj = toTitleCase(strng)

@@ -3,6 +3,7 @@ import Alert from "../components/Alert";
 import DisplayJsonArrayOfObjects from "../functions/display_json/DisplayJsonArrayOfObjects";
 import DisplayJsonArray from "../functions/display_json/DisplayJsonArray";
 import ReadMe from "../functions/read_me/ReadMe";
+import { assessJsonStructure } from "./utils";
 
 const App = ({ json }) => {
   const { path } = json;
@@ -26,46 +27,31 @@ const App = ({ json }) => {
     };
   }, []);
 
-  // Helper function to access json structure
-  const assessJsonStructure = (value) => {
-    if (Array.isArray(value)) {
-      if (value.length > 0 && typeof value[0] === 'object' && !Array.isArray(value[0])) {
-        return 'aob'; // Array of Objects
-      } else {
-        return 'array'; // Array (or Array of Arrays)
-      }
-    } else if (typeof value === 'object' && value !== null) {
-      return 'object'; // Single Object
-    } else {
-      return 'unknown'; // Could be primitive types or empty structures
-    }
-  };
-
   const extractNestedObject = (path) => {
-    //console.log("extractNestedObject called...", path);
-  
     // Match the last portion of the path after any array or object notation
-    const match = path.match(/(?:\[\d+\])?(\w+)$/);
+    const match = path.match(/(?:\[(\d+)\])?(\w+)?$/);
     
-    // If a match is found, return it; otherwise, return the original path
-    const result = match ? match[1] : path;
-  
-    //console.log("Stripped path:", result);
-    return result;
+    // If only an array index is provided (like "[0]"), return an empty string
+    if (match && match[1] && !match[2]) {
+      return "";
+    }
+    
+    // If a match is found, return the object key; otherwise, return the original path
+    return match[2] || "";
   };
   
   let obj
 
   // PATH
   switch (true) {
-    case typeof path === "string" && assessJsonStructure(json.json)=== "aob":
+    case typeof path === "string" && assessJsonStructure(json.json)=== "aoo":
       obj=extractNestedObject(path);
       console.log("displayJsonArrayOfObjects called...");
       return <DisplayJsonArrayOfObjects json={json} darkMode={prefersDarkMode} obj={obj} />;
 
     case typeof path === "string" && assessJsonStructure(json.json)=== "array":
       obj=extractNestedObject(path);
-      console.log("displayJsonArray called...");
+      console.log("displayJsonArray called...",{obj});
       return <DisplayJsonArray json={json} darkMode={prefersDarkMode} strng={obj} />;
 
     case typeof path === "string" && assessJsonStructure(json.json)=== "object":

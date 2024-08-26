@@ -61,5 +61,5 @@ console.log("version 1.0.2", {
 });
 
 //loadApp({path:"[0]fieldData", json:data, settings:{hide:["_","~","f_","E16","OBSI","db"],initialSearch:'',sortOrder:["Name","Email","phone"],format:[{key:"chargeRate",style:"currency"},{key:"fundsAvailable",style:"currency"}]}})
-//loadApp({path:"[0]customers", json:data2, settings:{sortOrder:["Name","Email"]}})
-loadApp({path:"[0]emails", json:arrayData})
+loadApp({path:"[0]customers", json:data2, settings:{sortOrder:["Name","Email"]}})
+//loadApp({path:"[0]emails", json:arrayData})
