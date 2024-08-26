@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Alert from "../components/Alert";
 import DisplayJsonArrayOfObjects from "../functions/display_json/DisplayJsonArrayOfObjects";
+import DisplayJsonArray from "../functions/display_json/DisplayJsonArray";
 import ReadMe from "../functions/read_me/ReadMe";
 
 const App = ({ json }) => {
   const { path } = json;
-  console.log(path)
 
   // DARK MODE
   const [prefersDarkMode, setPrefersDarkMode] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -26,30 +26,23 @@ const App = ({ json }) => {
     };
   }, []);
 
-  // Helper function to safely access nested properties
-  const assessNestedData = (obj, path) => {
-    console.log("getNestedDataExists called...", path, { obj });
-  
-    // Convert the path into an array of keys (both for dot notation and bracket notation)
-    const keys = path.match(/(\w+|\[\d+\])/g);
-  
-    // Reduce the object using the keys array, checking if the path exists
-    const exists = keys.reduce((o, p) => {
-      // Check if the key is in bracket notation, e.g., [0]
-      if (p.startsWith('[') && p.endsWith(']')) {
-        p = parseInt(p.slice(1, -1), 10); // Convert "[0]" to 0
+  // Helper function to access json structure
+  const assessJsonStructure = (value) => {
+    if (Array.isArray(value)) {
+      if (value.length > 0 && typeof value[0] === 'object' && !Array.isArray(value[0])) {
+        return 'aob'; // Array of Objects
+      } else {
+        return 'array'; // Array (or Array of Arrays)
       }
-      return (o && o[p] !== undefined) ? o[p] : false;
-    }, obj);
-  
-    // If the final result is false, the path does not exist
-    const result = exists !== false;
-    console.log(`Path exists: ${result}`);
-    return result;
+    } else if (typeof value === 'object' && value !== null) {
+      return 'object'; // Single Object
+    } else {
+      return 'unknown'; // Could be primitive types or empty structures
+    }
   };
 
   const extractNestedObject = (path) => {
-    console.log("stripObjectFromPath called...", path);
+    //console.log("extractNestedObject called...", path);
   
     // Match the last portion of the path after any array or object notation
     const match = path.match(/(?:\[\d+\])?(\w+)$/);
@@ -57,24 +50,25 @@ const App = ({ json }) => {
     // If a match is found, return it; otherwise, return the original path
     const result = match ? match[1] : path;
   
-    console.log("Stripped path:", result);
+    //console.log("Stripped path:", result);
     return result;
   };
   
+  let obj
 
   // PATH
   switch (true) {
-    case typeof path === "string" && assessNestedData(json.json, path):
-      const obj=extractNestedObject(path);
-      console.log("displayJsonArrayOfObjects called...",obj);
+    case typeof path === "string" && assessJsonStructure(json.json)=== "aob":
+      obj=extractNestedObject(path);
+      console.log("displayJsonArrayOfObjects called...");
       return <DisplayJsonArrayOfObjects json={json} darkMode={prefersDarkMode} obj={obj} />;
 
-    case typeof path === "string" && path.match(/^\[\d+\]$/):
+    case typeof path === "string" && assessJsonStructure(json.json)=== "array":
+      obj=extractNestedObject(path);
       console.log("displayJsonArray called...");
-      // Implement or uncomment the return statement once DisplayJsonArray is available
-      // return <DisplayJsonArray json={json} darkMode={prefersDarkMode} />;
+      return <DisplayJsonArray json={json} darkMode={prefersDarkMode} strng={obj} />;
 
-    case typeof path === "string" && path.match(/^{[^}]+}$/):
+    case typeof path === "string" && assessJsonStructure(json.json)=== "object":
       console.log("displayJsonObject called...");
       // Implement or uncomment the return statement once DisplayJsonObject is available
       // return <DisplayJsonObject json={json} darkMode={prefersDarkMode} />;

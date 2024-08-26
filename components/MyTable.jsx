@@ -7,13 +7,14 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table';
 
-const MyTable = ({ data, columns, callback, darkMode = false }) => {
+const MyTable = ({ data, columns, callback, darkMode = false, searchBar = true }) => {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),  // Ensure sorting model is applied
   });
+  console.log({data})
 
   // Handle row click
   const handleRowClick = (row) => {
@@ -40,7 +41,7 @@ const MyTable = ({ data, columns, callback, darkMode = false }) => {
                 onClick={() => handleSort(header)}
                 style={{
                   position: 'sticky',
-                  top: 53,
+                  top: searchBar?53:0,
                   borderBottom: darkMode ? '2px solid #1a1a1a' : '2px solid #e2e8f0',
                   background: darkMode ? '#4a5568' : '#cbd5e0',
                   color: darkMode ? '#e2e8f0' : '#4a5568',

@@ -24,6 +24,19 @@ const validateIsArrayofObjects = (data) => {
   
 };
 
+const validateIsArray = (data) => {
+    if (!Array.isArray(data)) {
+      return { message: "The data provided is not an array.", isValid: false };
+    }
+  
+    if (data.length === 0) {
+      return { message: "The data array is empty.", isValid: false };
+    }
+  
+    return { message: "The data is valid.", isValid: true };
+  
+};
+
 const formatCellValue = (value, formatStyle) => {
   if (!formatStyle) return value; // No format specified, return value as is
 
@@ -58,4 +71,4 @@ const toTitleCase = (str) => {
 };
 
 
-export {sendToFilemaker, validateIsArrayofObjects, formatCellValue, toTitleCase};
+export {sendToFilemaker, validateIsArrayofObjects, validateIsArray, formatCellValue, toTitleCase};

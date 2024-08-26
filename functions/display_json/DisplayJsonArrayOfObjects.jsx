@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MyTable from "../../components/MyTable";
+import App from "../../src/App";
 import Alert from "../../components/Alert";
 import SimpleInput from "../../components/Input";
 import { sendToFilemaker, validateIsArrayofObjects } from "./utils";
@@ -7,8 +8,7 @@ import handleSettings from "./settings"
 
 
 const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
-  console.log("JsonTable Init...",{json});
-  console.log(obj)
+  console.log(`Rendering ${obj}`)
   //safety check
   if(!json){
     return(
@@ -21,6 +21,7 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
   const settings = json.settings
   const [searchValue, setSearchValue] = useState(settings.initialSearch?settings.initialSearch:"");
   const [filteredData, setFilteredData] = useState([]);
+  const [subRowData, setSubRowData] = useState(null);
 
   //CUSTOM CSS
   const searchDiv = {
@@ -54,8 +55,15 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
     )
   }
 
+  //HANDLE RENDER UNDER ROW
+  const onRenderUnderRow = ({ path, json }) => {
+    console.log("onRenderUnderRow",{path, json})
+    setSubRowData({ path, json });
+  };
+
   //HANDLE SETTINGS
-  const columns = React.useMemo(() => handleSettings(data, settings), [data, settings.hide, settings.sortOrder, settings.format]);
+  const columns = React.useMemo(() => handleSettings(data, settings,onRenderUnderRow), [data, settings.hide, settings.sortOrder, settings.format]);
+  console.log({columns})
 
   //HANDLE SEARCHING
   useEffect(() => {
@@ -84,7 +92,12 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
         </div>
       </div>
       <div id="2" className="flex-grow overflow-auto">
-        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode}/>
+        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode} />
+        {subRowData && (
+          <div style={{ paddingLeft: '20px', marginTop: '10px', borderTop: '1px solid gray' }}>
+            <App json={{ path: subRowData.path, json: subRowData.json }} />
+          </div>
+        )}
       </div>
     </div>
   );
