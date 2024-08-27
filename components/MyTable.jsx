@@ -1,90 +1,117 @@
-import React from 'react';
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  getSortedRowModel,
-  getExpandedRowModel,  // Import getExpandedRowModel
-} from '@tanstack/react-table';
+import React, { useState } from 'react';
+import { FaEllipsisV } from 'react-icons/fa';
 
-const MyTable = ({ data, columns, callback, darkMode = false, searchBar = true }) => {
-  console.log("MyTable called ... ", { data });
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),  
-    getExpandedRowModel: getExpandedRowModel(),  // Include expanded rows functionality
-  });
+const MyTable = ({ data, darkMode = false, onRowClick, renderCell }) => {
+  const [expandedEmailRows, setExpandedEmailRows] = useState({});
 
-  // Handle row click
-  const handleRowClick = (row) => {
-    if (callback) {
-      callback(row.original);
-    }
+  const extractHeadings = () => {
+    if (data.length === 0) return [];
+    const firstRow = data[0];
+    return Object.keys(firstRow);
   };
+
+  const handleEmailClick = (e, rowIndex) => {
+    e.stopPropagation();
+    setExpandedEmailRows((prev) => ({
+      ...prev,
+      [rowIndex]: !prev[rowIndex],
+    }));
+  };
+
+  const headings = extractHeadings();
 
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
       <thead>
-        {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map(header => (
-              <th
-                key={header.id}
-                onClick={() => header.column.getToggleSortingHandler()}
-                style={{
-                  position: 'sticky',
-                  top: searchBar ? 53 : 0,
-                  borderBottom: darkMode ? '2px solid #1a1a1a' : '2px solid #e2e8f0',
-                  background: darkMode ? '#4a5568' : '#cbd5e0',
-                  color: darkMode ? '#e2e8f0' : '#4a5568',
-                  fontWeight: '600',
-                  textAlign: 'left',
-                  padding: '10px',
-                  zIndex: 5,
-                  cursor: 'pointer',
-                }}
-              >
-                {flexRender(header.column.columnDef.header, header.getContext())}
-                {header.column.getIsSorted() ? (header.column.getIsSorted() === 'asc' ? ' ▲' : ' ▼') : ''}
-              </th>
-            ))}
-          </tr>
-        ))}
+        <tr>
+          {headings.map((heading, index) => (
+            <th
+              key={index}
+              style={{
+                position: 'sticky',
+                top: 0,
+                borderBottom: darkMode ? '2px solid #1a1a1a' : '2px solid #e2e8f0',
+                background: darkMode ? '#4a5568' : '#cbd5e0',
+                color: darkMode ? '#e2e8f0' : '#4a5568',
+                fontWeight: '600',
+                textAlign: 'left',
+                padding: '10px',
+                zIndex: 5,
+                cursor: 'pointer',
+              }}
+            >
+              {heading.charAt(0).toUpperCase() + heading.slice(1)}
+            </th>
+          ))}
+        </tr>
       </thead>
       <tbody>
-        {table.getRowModel().rows.map(row => (
-          <React.Fragment key={row.id}>
+        {data.map((row, rowIndex) => (
+          <React.Fragment key={rowIndex}>
             <tr
-              key={row.id}
-              style={{ 
-                background: darkMode ? '#1a1a1a' : '#f7fafc'
-              }}
-              onClick={() => handleRowClick(row)}
+              style={{ background: darkMode ? '#1a1a1a' : '#f7fafc' }}
+              onClick={() => onRowClick && onRowClick(rowIndex)}
             >
-              {row.getVisibleCells().map(cell => (
-                <td
-                  key={cell.id}
-                  style={{
-                    padding: '10px',
-                    borderBottom: darkMode ? '2px solid #000000' : '1px solid #e2e8f0',
-                    color: darkMode ? '#cbd5e0' : '#2d3748',
-                  }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+              {headings.map((heading, columnIndex) => {
+                const cellValue = renderCell ? renderCell(rowIndex, columnIndex, row[heading], heading) : row[heading];
+                return (
+                  <td
+                    key={columnIndex}
+                    style={{
+                      padding: '10px',
+                      borderBottom: darkMode ? '2px solid #000000' : '1px solid #e2e8f0',
+                      color: darkMode ? '#cbd5e0' : '#2d3748',
+                      position: 'relative',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {Array.isArray(cellValue) && cellValue.length > 1 ? (
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <span style={{ marginRight: '24px' }}>{cellValue[0]}</span>
+                        <FaEllipsisV
+                          onClick={(e) => handleEmailClick(e, rowIndex)}
+                          style={{
+                            cursor: 'pointer',
+                            color: darkMode ? '#e2e8f0' : '#4a5568',
+                            fontSize: '1.2rem',
+                            position: 'absolute',
+                            right: '0',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                          }}
+                        />
+                        {expandedEmailRows[rowIndex] && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '100%',
+                            right: '0',
+                            backgroundColor: darkMode ? '#2d3748' : '#ffffff',
+                            color: darkMode ? '#e2e8f0' : '#2d3748',
+                            padding: '10px',
+                            borderRadius: '4px',
+                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                            zIndex: 100,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            overflowY: 'auto',
+                            marginTop: '2px',
+                          }}>
+                            {cellValue.slice(1).map((email, index) => (
+                              <div key={index} style={{ padding: '5px 0' }}>
+                                {email}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      cellValue
+                    )}
+                  </td>
+                );
+              })}
             </tr>
-            {row.getIsExpanded() && (
-              <tr>
-                <td colSpan={columns.length} style={{ paddingLeft: '20px', background: darkMode ? '#222' : '#fff' }}>
-                  {/* Render the expanded content here */}
-                  <App json={{ path: row.original.path, json: row.original.json }} />
-                </td>
-              </tr>
-            )}
           </React.Fragment>
         ))}
       </tbody>
