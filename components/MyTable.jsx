@@ -5,17 +5,32 @@ import {
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
-  getExpandedRowModel,  // Import getExpandedRowModel
+  getExpandedRowModel,
 } from '@tanstack/react-table';
 
-const MyTable = ({ data, columns, callback, darkMode = false, searchBar = true }) => {
+const MyTable = ({ data, updateData, columns, callback, darkMode, onRowClick, expandedRows, searchBar }) => {
   console.log("MyTable called ... ", { data });
+
+  const [tableData, setTableData] = useState(data); // Maintain internal state for data
+
+  // Update function for external data changes
+  const handleDataUpdate = (newData) => {
+    setTableData(newData); // Update internal state
+  };
+
+  // Integrate updateData prop with internal state
+  useEffect(() => {
+    if (updateData) {
+      handleDataUpdate(updateData); // Update internal data if provided
+    }
+  }, [updateData]);
+
   const table = useReactTable({
-    data,
+    data: tableData, // Use internal state for data
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),  
-    getExpandedRowModel: getExpandedRowModel(),  // Include expanded rows functionality
+    getSortedRowModel: getSortedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(), // Include expanded rows functionality
   });
 
   // Handle row click
@@ -55,38 +70,27 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBar = true }
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.map(row => (
-          <React.Fragment key={row.id}>
-            <tr
-              key={row.id}
-              style={{ 
-                background: darkMode ? '#1a1a1a' : '#f7fafc'
-              }}
-              onClick={() => handleRowClick(row)}
-            >
-              {row.getVisibleCells().map(cell => (
-                <td
-                  key={cell.id}
-                  style={{
-                    padding: '10px',
-                    borderBottom: darkMode ? '2px solid #000000' : '1px solid #e2e8f0',
-                    color: darkMode ? '#cbd5e0' : '#2d3748',
-                  }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+      {table.getRowModel().rows.map(row => (
+  <React.Fragment key={row.id}>
+    <tr key={row.id} style={{ background: darkMode ? '#1a1a1a' : '#f7fafc' }} onClick={() => handleRowClick(row)}>
+      {/* ... existing cell rendering ... */}
+    </tr>
+    {expandedRows[row.id] && ( // Check if the current row is expanded
+      <tr>
+        <td colSpan={columns.length} style={{ paddingLeft: '20px', background: darkMode ? '#222' : '#fff' }}>
+          {/* Render the expanded content here */}
+          {row.original.emails && ( // Check if the 'emails' property exists
+            <ul>
+              {row.original.emails.map(email => (
+                <li key={email}>{email}</li>
               ))}
-            </tr>
-            {row.getIsExpanded() && (
-              <tr>
-                <td colSpan={columns.length} style={{ paddingLeft: '20px', background: darkMode ? '#222' : '#fff' }}>
-                  {/* Render the expanded content here */}
-                  <App json={{ path: row.original.path, json: row.original.json }} />
-                </td>
-              </tr>
-            )}
-          </React.Fragment>
-        ))}
+            </ul>
+          )}
+        </td>
+      </tr>
+    )}
+  </React.Fragment>
+))}
       </tbody>
     </table>
   );

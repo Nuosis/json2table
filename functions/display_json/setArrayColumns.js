@@ -13,7 +13,7 @@ const setArrayColumns = (obj, onRenderUnderRow) => {
         let displayValue;
 
         if (Array.isArray(value)) {
-          displayValue = value[0]; // Show only the first item if it's an array
+          displayValue = value; // Show only the first item if it's an array
         } else {
           displayValue = value; // Show the string value directly
         }

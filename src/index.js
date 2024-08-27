@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import data from "./test_data/data.json"
+// import data from "./test_data/data.json"
 import data2 from "./test_data/data2.json"
 import arrayData from "./test_data/array.json"
 import objectData from "./test_data/object.json"
@@ -63,5 +63,5 @@ console.log("version 1.0.2", {
 
 //loadApp({path:"[0]fieldData", json:data, settings:{hide:["_","~","f_","E16","OBSI","db"],initialSearch:'',sortOrder:["Name","Email","phone"],format:[{key:"chargeRate",style:"currency"},{key:"fundsAvailable",style:"currency"}]}})
 loadApp({path:"[0]customers", json:data2, settings:{sortOrder:["Name","Email"]}})
-//loadApp({path:"[0]emails", json:arrayData})
+// loadApp({path:"[0]emails", json:arrayData})
 //loadApp({path:"{}Line", json:objectData, settings:{hide:["Allow","value","Custom","Exchange","Linked","MetaData","PrintStatus","SyncToken","domain","sparse"]}})

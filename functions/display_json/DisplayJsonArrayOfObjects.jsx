@@ -8,6 +8,21 @@ import handleSettings from "./settings"
 
 
 const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
+
+
+  const [expandedRows, setExpandedRows] = useState({}); // Object to store expanded state
+
+  const handleRowClick = (rowIndex) => {
+    setExpandedRows({ ...expandedRows, [rowIndex]: !expandedRows[rowIndex] });
+  };
+
+
+
+
+
+
+
+  
   console.log(`Rendering ${obj}`)
   //safety check
   if(!json){
@@ -92,7 +107,7 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
         </div>
       </div>
       <div id="2" className="flex-grow overflow-auto">
-        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode} />
+        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode}  onRowClick={handleRowClick}  expandedRows={expandedRows}/>
       </div>
     </div>
   );
