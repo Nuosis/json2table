@@ -78,7 +78,7 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
   return (
     <div className="h-screen" >
       <div id="1" style={searchDiv}>
-        <div className="w-1/3">
+        <div className="w-64">
           <SimpleInput 
             id="1" 
             type="text" 

@@ -7,8 +7,6 @@ import {
   getSortedRowModel,
   getExpandedRowModel,
 } from '@tanstack/react-table';
-import LrgPillButton from './LrgPillButton';
-import { assessJsonStructure } from '../utils';
 import { handleExpandedRow } from './MyTable.Utils';
 
 const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = false, obj }) => {
@@ -35,7 +33,7 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = 
             {headerGroup.headers.map(header => (
               <th
                 key={header.id}
-                onClick={() => header.column.getToggleSortingHandler()}
+                onClick={header.column.getToggleSortingHandler()}
                 style={{
                   position: 'sticky',
                   top: searchBarMargin ? 53 : 0,

@@ -8,6 +8,7 @@ const setArrayColumns = (obj) => {
       id: 'id', // A single column since it's an array
       header: obj ? obj : 'Values', // General name of the header
       accessorKey: obj ? obj : 'Values', // Since we have mixed types, just return the row itself
+      enableSorting: true, // Sorting is enabled by default
       cell: info => {
         const value = info.getValue();
         const row = info.row; // Get the current row object

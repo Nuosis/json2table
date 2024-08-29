@@ -6,6 +6,7 @@ const createColumnDef = (key, formatStyle) => ({
   id: key,
   header: toTitleCase(key),
   accessorKey: key,
+  enableSorting: true,
   cell: info => {
     const value = info.getValue();
     const row = info.row;
