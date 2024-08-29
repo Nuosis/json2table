@@ -6,6 +6,13 @@
   background-color: #1a1a1a; 
 }
 
+/* Background color for light mode */
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: white; 
+  }
+}
+
 #root {
   height: max-content;
 }

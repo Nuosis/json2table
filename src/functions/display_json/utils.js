@@ -5,6 +5,7 @@ const sendToFilemaker = (row) => {
 };
 
 const validateIsArrayofObjects = (data) => {
+    console.log({data})
     if (!Array.isArray(data)) {
       return { message: "The data provided is not an array.", isValid: false };
     }
@@ -67,5 +68,13 @@ const toTitleCase = (str) => {
     .join(' ');
 };
 
+const transformArrayToObjects = (array, key) => {
+  const k = key ? key : "Values";
+  return array.map((item, index) => ({
+    id: index + 1,  // Adding an id key with the value being the index (starting from 1)
+    [k]: item
+  }));
+};
 
-export {sendToFilemaker, validateIsArrayofObjects, validateIsArray, formatCellValue, toTitleCase};
+
+export {sendToFilemaker, validateIsArrayofObjects, validateIsArray, formatCellValue, toTitleCase, transformArrayToObjects};

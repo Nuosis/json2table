@@ -1,0 +1,217 @@
+[
+  {
+    "Amount" : 80.0,
+    "Description" : "Cassandra Paris Admin Fee",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "1",
+    "LineNum" : 1,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Admin Fee Income",
+        "value" : "33"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "4"
+      },
+      "UnitPrice" : 80
+    }
+  },
+  {
+    "Amount" : 150.0,
+    "Description" : "Cassandra Paris Year End Withholdings",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "3",
+    "LineNum" : 2,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Cleaner Withholdings Account",
+        "value" : "39"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "6"
+      },
+      "UnitPrice" : 150
+    }
+  },
+  {
+    "Amount" : 35.0,
+    "Description" : "Cassandra Paris Annual Report Withholdings",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "7",
+    "LineNum" : 3,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Cleaner Withholdings Account",
+        "value" : "39"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "6"
+      },
+      "UnitPrice" : 35
+    }
+  },
+  {
+    "Amount" : 80.0,
+    "Description" : "Cassandra Paris Extra GST withholdings Withholdings",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "5",
+    "LineNum" : 4,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Cleaner Withholdings Account",
+        "value" : "39"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "6"
+      },
+      "UnitPrice" : 80
+    }
+  },
+  {
+    "Amount" : 263.01,
+    "Description" : "Cassandra Paris GST Withholdings",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "6",
+    "LineNum" : 5,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Cleaner Withholdings Account",
+        "value" : "39"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "6"
+      },
+      "UnitPrice" : 263.01
+    }
+  },
+  {
+    "Amount" : 1949.77,
+    "Description" : "Cassandra Source Deductions Withholdings",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "11",
+    "LineNum" : 6,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaner Clearing:Cassandra Source Deductions Withholdings",
+        "value" : "41"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "6"
+      },
+      "UnitPrice" : 1949.77
+    }
+  },
+  {
+    "Amount" : 92.93,
+    "Description" : "Cassandra Paris WCB Withholdings",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "4",
+    "LineNum" : 7,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Cleaner Withholdings Account",
+        "value" : "39"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "6"
+      },
+      "UnitPrice" : 92.93
+    }
+  },
+  {
+    "Amount" : 320.11,
+    "Description" : "Cassandra Paris Finder's Fee for Birch Family Medicine Clinic (General Janitorial)",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "8",
+    "LineNum" : 8,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Finders Fees Income",
+        "value" : "27"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "4"
+      },
+      "UnitPrice" : 320.112
+    }
+  },
+  {
+    "Amount" : 135.68,
+    "Description" : "Cassandra Paris Finder's Fee for Colyvan Pacific - Lampson Court (General Janitorial)",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "9",
+    "LineNum" : 9,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Finders Fees Income",
+        "value" : "27"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "4"
+      },
+      "UnitPrice" : 135.68
+    }
+  },
+  {
+    "Amount" : 71.14,
+    "Description" : "Cassandra Paris Finder's Fee for Birch Family Medicine Clinic (Off Day Touch Up)",
+    "DetailType" : "SalesItemLineDetail",
+    "Id" : "10",
+    "LineNum" : 10,
+    "SalesItemLineDetail" : 
+    {
+      "ItemRef" : 
+      {
+        "name" : "Cleaning Income:Franchise Income:Finders Fees Income",
+        "value" : "27"
+      },
+      "Qty" : 1,
+      "TaxCodeRef" : 
+      {
+        "value" : "4"
+      },
+      "UnitPrice" : 71.136
+    }
+  },
+  {
+    "Amount" : 3177.64,
+    "DetailType" : "SubTotalLineDetail",
+    "SubTotalLineDetail" : {}
+  }
+]

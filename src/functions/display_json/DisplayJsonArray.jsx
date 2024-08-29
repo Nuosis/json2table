@@ -3,22 +3,14 @@ import { sendToFilemaker } from "./utils";
 import MyTable from "../../components/MyTable";
 import MyHeadlessTable from '../../components/MyHeadlessTable';
 import Alert from "../../components/Alert";
-import { sendToFilemaker, validateIsArray, toTitleCase } from "./utils";
+import { sendToFilemaker, validateIsArray, toTitleCase, transformArrayToObjects } from "./utils";
 import setArrayColumns from './setArrayColumns';
-
-const transformArrayToObjects = (array, key) => {
-  const k = key ? key : "Values";
-  return array.map((item, index) => ({
-    id: index + 1,  // Adding an id key with the value being the index (starting from 1)
-    [k]: item
-  }));
-};
 
 
 const DisplayJsonArray = ({ json, darkMode, strng }) => {
   const obj = toTitleCase(strng)
 
-  console.log(`Rendering ${obj}`)
+  console.log(`jsonArray Rendering ${obj}`)
   //safety check
   if(!json){
     return(
@@ -38,19 +30,13 @@ const DisplayJsonArray = ({ json, darkMode, strng }) => {
 
   const data = transformArrayToObjects(d,obj)
 
-  //HANDLE RENDER UNDER ROW
-  const onRenderUnderRow = ({ path, json }) => {
-    console.log("onRenderUnderRow",{path, json})
-    setSubRowData({ path, json });
-  };
 
   //HANDLE COLUMNS
-  const columns = React.useMemo(() => setArrayColumns(obj, onRenderUnderRow), [data]);
-  console.log({columns})
+  const columns = React.useMemo(() => setArrayColumns(obj), [data]);
 
   return obj
-  ? <MyTable searchBar = {false} data={data} columns={columns} callback={sendToFilemaker} darkMode={darkMode}/>
-  : <MyHeadlessTable data={data} columns={columns} callback={sendToFilemaker} darkMode={darkMode}/>;;
+  ? <MyTable data={data} columns={columns} callback={sendToFilemaker} darkMode={darkMode} searchBarMargin = {false} obj={obj} />
+  : <MyHeadlessTable data={data} columns={columns} callback={sendToFilemaker} darkMode={darkMode}/>;
 };
 
 export default DisplayJsonArray;

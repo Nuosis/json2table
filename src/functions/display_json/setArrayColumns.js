@@ -2,14 +2,15 @@ import React from 'react';
 import { FaEllipsisV } from 'react-icons/fa';
 
 // Helper function to create column definitions for an array
-const setArrayColumns = (obj, onRenderUnderRow) => {
+const setArrayColumns = (obj) => {
   return [
     {
       id: 'id', // A single column since it's an array
-      header: obj?obj:'Values', // General name of the header
-      accessorKey: obj?obj:'Values', // Since we have mixed types, just return the row itself
+      header: obj ? obj : 'Values', // General name of the header
+      accessorKey: obj ? obj : 'Values', // Since we have mixed types, just return the row itself
       cell: info => {
         const value = info.getValue();
+        const row = info.row; // Get the current row object
         let displayValue;
 
         if (Array.isArray(value)) {
@@ -32,8 +33,8 @@ const setArrayColumns = (obj, onRenderUnderRow) => {
                 }}
                 onClick={(e) => {
                   e.stopPropagation(); // Prevent row click from being triggered
-                  const path = `[0]`; // Simplified path since it's an array
-                  onRenderUnderRow({ path, json: value });
+                  row.toggleExpanded(); // Toggle the expanded state of the row
+                  row.original.cellValue = value; // Store the content that triggered the expansion
                 }}
               >
                 <FaEllipsisV style={{ width: '16px', height: '16px' }} />

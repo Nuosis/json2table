@@ -1,29 +1,14 @@
 import { toTitleCase, formatCellValue } from './utils';
 import { FaEllipsisV } from 'react-icons/fa';
-import { assessJsonStructure } from '../../src/utils';
 
-//HELPER FUNCTIONS
-const getValuePath = (value, key) => {
-  // Use the assessJsonStructure function to determine the structure of the value
-  const structure = assessJsonStructure(value);
-
-  // Return the appropriate path based on the structure
-  switch (structure) {
-    case 'array':
-      return '[0]'; // For arrays, return "[0]"
-    case 'object':
-      return '{}'; // For objects, return "{}"
-    default:
-      return `[0]${key}`; // For anything else, return "[0]" followed by the key
-  }
-};
 //Helper function to create column definitions
-const createColumnDef = (key, formatStyle, onRenderUnderRow) => ({
+const createColumnDef = (key, formatStyle) => ({
   id: key,
   header: toTitleCase(key),
   accessorKey: key,
   cell: info => {
     const value = info.getValue();
+    const row = info.row;
     const displayValue = Array.isArray(value) ? value[0] : value; // Show only the first item if it's an array
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -39,9 +24,8 @@ const createColumnDef = (key, formatStyle, onRenderUnderRow) => ({
             }}
             onClick={(e) => {
               e.stopPropagation(); // Prevent row click from being triggered
-              const path = getValuePath(value,key);
-              console.log({path})
-              onRenderUnderRow({ path, json: value });
+              row.toggleExpanded(); // Toggle the expanded state of the row
+              row.original.cellValue = value; // Store the content that triggered the expansion
             }}
           >
             <FaEllipsisV style={{ width: '16px', height: '16px' }} />
@@ -54,8 +38,8 @@ const createColumnDef = (key, formatStyle, onRenderUnderRow) => ({
 
 
 // Updated handleSettings function
-const handleSettings = (data, settings, onRenderUnderRow) => {
-  const { hide = [], sortOrder = [], format = [] } = settings;
+const handleSettings = (data, settings) => {
+  const { hide = [], columnOrder = [], format = [] } = settings;
 
   // Create a lookup map for formatting
   const formatMap = format.reduce((acc, { key, style }) => {
@@ -67,15 +51,15 @@ const handleSettings = (data, settings, onRenderUnderRow) => {
   const filteredKeys = Object.keys(data[0])
     .filter(key => !hide.some(prefix => key.startsWith(prefix)));
 
-  // Step 2: Sort the columns based on `settings.sortOrder`
-  const orderedColumns = sortOrder
-    .filter(key => filteredKeys.includes(key)) // Only include keys that are not hidden and are in sortOrder
-    .map(key => createColumnDef(key, formatMap[key], onRenderUnderRow));
+  // Step 2: Sort the columns based on `settings.columnOrder`
+  const orderedColumns = columnOrder
+    .filter(key => filteredKeys.includes(key)) // Only include keys that are not hidden and are in columnOrder
+    .map(key => createColumnDef(key, formatMap[key]));
 
-  // Step 3: Include the remaining columns that weren't specified in `sortOrder`
+  // Step 3: Include the remaining columns that weren't specified in `columnOrder`
   const remainingColumns = filteredKeys
-    .filter(key => !sortOrder.includes(key)) // Exclude keys that are already in orderedColumns
-    .map(key => createColumnDef(key, formatMap[key], onRenderUnderRow));
+    .filter(key => !columnOrder.includes(key)) // Exclude keys that are already in orderedColumns
+    .map(key => createColumnDef(key, formatMap[key]));
 
   // Combine orderedColumns with remainingColumns
   const finalColumns = [...orderedColumns, ...remainingColumns];

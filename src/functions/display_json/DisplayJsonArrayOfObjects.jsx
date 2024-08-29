@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import MyTable from "../../components/MyTable";
-import App from "../../src/App";
 import Alert from "../../components/Alert";
 import SimpleInput from "../../components/Input";
 import { sendToFilemaker, validateIsArrayofObjects } from "./utils";
@@ -8,7 +7,7 @@ import handleSettings from "./settings"
 
 
 const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
-  console.log(`Rendering ${obj}`)
+  console.log(`jsonAoO Rendering ${obj}`)
   //safety check
   if(!json){
     return(
@@ -17,11 +16,13 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
   }
 
   //set variables/state
-  const d = json.json;
   const settings = json.settings
   const [searchValue, setSearchValue] = useState(settings.initialSearch?settings.initialSearch:"");
   const [filteredData, setFilteredData] = useState([]);
-  const [subRowData, setSubRowData] = useState(null);
+
+
+  const d = json.json;
+  console.log("data",d)
 
   //CUSTOM CSS
   const searchDiv = {
@@ -45,24 +46,22 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
   }
 
   // Extract OBJECT from each record
-  const data = React.useMemo(() => d.map(record => record[obj]), [d, obj]);
+  let data = d
+  if(d[0][obj]!==undefined){
+    data = React.useMemo(() => d.map(record => record[obj]), [d, obj]);
+  }
+  
 
 
   // Ensure data array is not empty after extraction
   if(!validateIsArrayofObjects(data).isValid){
     return (
-      <Alert title="Invalid Data Format" dialog = {validateIsArrayofObjects(data).message} actionText="OK" />
+      <Alert title="Invalid Format" dialog = {validateIsArrayofObjects(data).message} actionText="OK" />
     )
   }
 
-  //HANDLE RENDER UNDER ROW
-  const onRenderUnderRow = ({ path, json }) => {
-    console.log("onRenderUnderRow",{path, json})
-    setSubRowData({ path, json });
-  };
-
   //HANDLE SETTINGS
-  const columns = React.useMemo(() => handleSettings(data, settings,onRenderUnderRow), [data, settings.hide, settings.sortOrder, settings.format]);
+  const columns = React.useMemo(() => handleSettings(data, settings), [data, settings.hide, settings.columnOrder, settings.format]);
   console.log({columns})
 
   //HANDLE SEARCHING
@@ -92,7 +91,7 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, obj}) => {
         </div>
       </div>
       <div id="2" className="flex-grow overflow-auto">
-        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode} />
+        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode} obj={obj} />
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Alert from "../components/Alert";
-import DisplayJsonArrayOfObjects from "../functions/display_json/DisplayJsonArrayOfObjects";
-import DisplayJsonArray from "../functions/display_json/DisplayJsonArray";
-import ReadMe from "../functions/read_me/ReadMe";
+import Alert from "./components/Alert"
+import DisplayJsonArrayOfObjects from "./functions/display_json/DisplayJsonArrayOfObjects";
+import DisplayJsonArray from "./functions/display_json/DisplayJsonArray";
+import ReadMe from "./functions/read_me/ReadMe";
 import { assessJsonStructure } from "./utils";
 
 const App = ({ json }) => {
@@ -46,7 +46,7 @@ const App = ({ json }) => {
   switch (true) {
     case typeof path === "string" && assessJsonStructure(json.json)=== "aoo":
       obj=extractNestedObject(path);
-      console.log("displayJsonArrayOfObjects called...");
+      console.log("displayJsonArrayOfObjects called...",json.json,obj);
       return <DisplayJsonArrayOfObjects json={json} darkMode={prefersDarkMode} obj={obj} />;
 
     case typeof path === "string" && assessJsonStructure(json.json)=== "array":

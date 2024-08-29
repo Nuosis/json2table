@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
-  getExpandedRowModel,  // Import getExpandedRowModel
+  getExpandedRowModel,
 } from '@tanstack/react-table';
+import LrgPillButton from './LrgPillButton';
+import { assessJsonStructure } from '../utils';
+import { handleExpandedRow } from './MyTable.Utils';
 
-const MyTable = ({ data, columns, callback, darkMode = false, searchBar = true }) => {
-  console.log("MyTable called ... ", { data });
+const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = false, obj }) => {
   const table = useReactTable({
     data,
     columns,
@@ -36,7 +38,7 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBar = true }
                 onClick={() => header.column.getToggleSortingHandler()}
                 style={{
                   position: 'sticky',
-                  top: searchBar ? 53 : 0,
+                  top: searchBarMargin ? 53 : 0,
                   borderBottom: darkMode ? '2px solid #1a1a1a' : '2px solid #e2e8f0',
                   background: darkMode ? '#4a5568' : '#cbd5e0',
                   color: darkMode ? '#e2e8f0' : '#4a5568',
@@ -80,8 +82,7 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBar = true }
             {row.getIsExpanded() && (
               <tr>
                 <td colSpan={columns.length} style={{ paddingLeft: '20px', background: darkMode ? '#222' : '#fff' }}>
-                  {/* Render the expanded content here */}
-                  <App json={{ path: row.original.path, json: row.original.json }} />
+                  {handleExpandedRow(row.original.cellValue, callback, darkMode, searchBarMargin)}
                 </td>
               </tr>
             )}
