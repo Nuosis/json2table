@@ -1,6 +1,4 @@
-import setArrayColumns from "../functions/display_json/setArrayColumns";
-import handleSettings from "../functions/display_json/settings";
-import { transformArrayToObjects } from "../functions/display_json/utils";
+import {  handleSettings, ensureSettingsDefaults,transformArrayToObjects } from "../functions/display_json/utils";
 import { assessJsonStructure } from "../utils";
 import Alert from "./Alert"
 import MyHeadlessTable from "./MyHeadlessTable";
@@ -14,13 +12,15 @@ const handleExpandedRow = (data, callback, darkMode) => {
   switch (processedData) {
     case "aoo":
       const dataObjectified =   data.map(record => record[obj])
-      const aooColumns = handleSettings(data, settings);
+      const aooSettings = ensureSettingsDefaults(json.settings)
+      const aooColumns = handleSettings(data, aooSettings);
       return <MyTable data={dataObjectified} columns={aooColumns} callback={callback} darkMode={darkMode} />;
     case "array":
       const dataArray = data.slice(1)
       const formattedData = transformArrayToObjects(dataArray);
-      const columns = setArrayColumns();
-      return <MyHeadlessTable data={formattedData} columns={columns} callback={callback} darkMode={darkMode} />;
+      const arraySettings = ensureSettingsDefaults()
+      const arrayColumns = handleSettings(formattedData, arraySettings);;
+      return <MyHeadlessTable data={formattedData} columns={arrayColumns} callback={callback} darkMode={darkMode} />;
     case "object":
       console.log("displayJsonObject called...");
       // Implement or uncomment the return statement once DisplayJsonObject is available

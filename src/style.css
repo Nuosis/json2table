@@ -8,7 +8,7 @@
 
 /* Background color for light mode */
 @media (prefers-color-scheme: light) {
-  body {
+  #body {
     background-color: white; 
   }
 }

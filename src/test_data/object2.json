@@ -1,0 +1,45 @@
+{
+  "customerId": "123456",
+  "firstName": "Bob",
+  "lastName": "Smith",
+  "contactDetails": {
+    "emails": [
+      "bsmith@example.com",
+      "bob.smith@workexample.com"
+    ],
+    "phones": [
+      "+1-555-555-5555",
+      "+1-555-555-5556"
+    ],
+    "addresses": {
+      "home": {
+        "addressLine1": "123 Main St",
+        "addressLine2": "Apt 4B",
+        "city": "Springfield",
+        "state": "IL",
+        "postalCode": "62704",
+        "country": "USA"
+      },
+      "work": {
+        "addressLine1": "456 Work St",
+        "addressLine2": "Suite 101",
+        "city": "Springfield",
+        "state": "IL",
+        "postalCode": "62701",
+        "country": "USA"
+      }
+    }
+  },
+  "dateOfBirth": "1980-01-01",
+  "accountCreationDate": "2023-09-01",
+  "lastPurchaseDate": "2024-08-25",
+  "preferredContactMethod": "email",
+  "membershipStatus": "Gold",
+  "referralCode": "REF12345",
+  "notes": "Customer prefers evening appointments.",
+  "company": "Acme Corp",
+  "jobTitle": "Senior Developer",
+  "loyaltyPoints": "1500",
+  "gender": "Male",
+  "maritalStatus": "Married"
+}

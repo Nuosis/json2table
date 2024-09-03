@@ -3,12 +3,11 @@ import { sendToFilemaker } from "./utils";
 import MyTable from "../../components/MyTable";
 import MyHeadlessTable from '../../components/MyHeadlessTable';
 import Alert from "../../components/Alert";
-import { sendToFilemaker, validateIsArray, toTitleCase, transformArrayToObjects } from "./utils";
-import setArrayColumns from './setArrayColumns';
+import { handleSettings, ensureSettingsDefaults, sendToFilemaker, validateIsArray, toTitleCase, transformArrayToObjects } from "./utils";
 
 
-const DisplayJsonArray = ({ json, darkMode, strng }) => {
-  const obj = toTitleCase(strng)
+const DisplayJsonArray = ({ json, darkMode, ky }) => {
+  const obj = ky ? toTitleCase(ky) : "";
 
   console.log(`jsonArray Rendering ${obj}`)
   //safety check
@@ -19,23 +18,27 @@ const DisplayJsonArray = ({ json, darkMode, strng }) => {
   }
 
   //set variables/state
-  const d = json.json;
+  const settings = ensureSettingsDefaults(json.settings)
+
+  const rawData = json.json?json.json:json;
 
   // Data checks
-  if(!validateIsArray(d).isValid){
+  if(!validateIsArray(rawData).isValid){
     return (
-      <Alert title="Invalid Data Format" dialog = {validateIsArray(d).message} actionText="OK" />
+      <Alert title="Invalid Data Format" dialog = {validateIsArray(rawData).message} actionText="OK" />
     )
   }
+  //console.log({rawData,ky,settings})
+  const data = transformArrayToObjects(rawData,obj)
+  console.log("data",data)
 
-  const data = transformArrayToObjects(d,obj)
+  //HANDLE SETTINGS
+  const columns = React.useMemo(() => handleSettings(data, settings), [data, settings.hide, settings.columnOrder, settings.format]);
+  console.log({columns})
+  //const columns = React.useMemo(() => setArrayColumns(obj), [data]);
 
-
-  //HANDLE COLUMNS
-  const columns = React.useMemo(() => setArrayColumns(obj), [data]);
-
-  return obj
-  ? <MyTable data={data} columns={columns} callback={sendToFilemaker} darkMode={darkMode} searchBarMargin = {false} obj={obj} />
+  return ky
+  ? <MyTable data={data} columns={columns} callback={sendToFilemaker} darkMode={darkMode} searchBarMargin = {false} obj={ky} />
   : <MyHeadlessTable data={data} columns={columns} callback={sendToFilemaker} darkMode={darkMode}/>;
 };
 

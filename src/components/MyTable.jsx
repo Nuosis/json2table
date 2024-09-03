@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -10,6 +9,7 @@ import {
 import { handleExpandedRow } from './MyTable.Utils';
 
 const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = false, obj }) => {
+  //console.log("MyTable Called")
   const table = useReactTable({
     data,
     columns,
@@ -17,6 +17,7 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = 
     getSortedRowModel: getSortedRowModel(),  
     getExpandedRowModel: getExpandedRowModel(),  // Include expanded rows functionality
   });
+  //console.log({table})
 
   // Handle row click
   const handleRowClick = (row) => {
@@ -24,6 +25,11 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = 
       callback(row.original);
     }
   };
+  
+  const isNaNValue = (value) => {
+    return value === null || value === undefined || value === '' || value === '$NaN' || value === 'NaN' || (typeof value === 'number' && isNaN(value));
+  };
+
 
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -73,7 +79,9 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = 
                     color: darkMode ? '#cbd5e0' : '#2d3748',
                   }}
                 >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                {isNaNValue(cell.getValue())
+                  ? ''
+                  : flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>
