@@ -15,7 +15,7 @@ const sendObjectToFilemaker = ({data,item}) => {
 };
 
 const validateIsArrayofObjects = (data) => {
-    console.log({data})
+    console.log("IsArrayOfObj: ",data)
     if (!Array.isArray(data)) {
       return { message: "The data provided is not an array.", isValid: false };
     }
@@ -80,6 +80,7 @@ const formatDate = (value, format) => {
 };
 
 const formatCellValue = (value, formatStyle) => {
+  //console.log("formatCellValue",{value, formatStyle})
   if (!formatStyle) return value; // No format specified, return value as is
 
   if (formatStyle.startsWith('decimal')) {
@@ -95,14 +96,37 @@ const formatCellValue = (value, formatStyle) => {
   }
 
   switch (formatStyle) {
-    case 'currency':
+    case 'currency$':
       return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
     default:
       return value; // Return the value as is if format is not recognized
   }
 };
 
-const toTitleCase = (str) => {
+const removeEmptyKeys = (obj) => {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    if (
+      value === "" ||                             // Empty string
+      value === null ||                           // Null
+      value === undefined ||                      // Undefined
+      (Array.isArray(value) && value.length === 0) || // Empty array
+      (typeof value === "object" && Object.keys(value).length === 0) // Empty object
+    ) {
+      return acc; // Skip adding this key
+    }
+
+    // If the value is not empty, add it to the accumulator
+    acc[key] = value;
+    return acc;
+  }, {});
+};
+
+const toTitleCase = (str) => {  
+  // Check if the string is all uppercase, and if so, return it as is
+  if (str === str.toUpperCase()) {
+    return str;
+  }
+
   // Convert snake_case to camelCase by replacing underscores with spaces and capitalizing the first letter of each word
   const intermediateStr = str.replace(/_/g, ' ');
 
@@ -178,7 +202,7 @@ const handleSettings = (data, settings) => {
   // Step 1: Filter out columns to omit based on `settings.hide`
   const filteredKeys = Object.keys(data[0])
     .filter(key => !hide.some(prefix => key.startsWith(prefix)));
-    console.log({filteredKeys})
+    console.log("filteredKeys: ",filteredKeys)
 
   // Step 2: Sort the columns based on `settings.columnOrder`
   const orderedColumns = columnOrder
@@ -208,7 +232,7 @@ const handleSettings = (data, settings) => {
 };
 
 const handleFormMap = (data, formMap) => {
-  //console.log({formMap})
+  console.log("handleFormMap",{formMap},{data})
   const { hide = [], group = [], format = [], labels = {}, title = ""  } = formMap;
   //console.log({labels})
 
@@ -225,7 +249,7 @@ const handleFormMap = (data, formMap) => {
   group.forEach(({ keys, title }) => {
     renderObj[title] = {};
     keys.forEach(key => {
-      if (!hide.includes(key) && data.hasOwnProperty(key)) {
+      if (!hide.some(h => key.startsWith(h)) && data.hasOwnProperty(key)) {
         let value = data[key];
 
         // Apply formatting if needed
@@ -243,8 +267,9 @@ const handleFormMap = (data, formMap) => {
 
   // Step 2: Handle ungrouped keys (keys that are not in the hide array and not already grouped)
   const ungroupedKeys = Object.keys(data).filter(
-    key => !group.some(g => g.keys.includes(key)) && !hide.includes(key)
+    key => !group.some(g => g.keys.includes(key)) && !hide.some(h => key.startsWith(h))
   );
+  console.log("ungroupedKeys",{ungroupedKeys})
 
   if (ungroupedKeys.length > 0) {
     renderObj["Other Data"] = renderObj["Other Data"] || {};
@@ -283,6 +308,7 @@ const ensureSettingsDefaults = (settings = {}) => {
     hideArray.push('id');
   }
   return {
+    ...settings,
     hide: hideArray,
     labels: settings.labels || {},
     columnOrder: settings.columnOrder || [],
@@ -297,7 +323,9 @@ const ensureFormDefaults = (form = {}) => {
   if (!hideArray.includes('id')) {
     hideArray.push('id');
   }
+
   return {
+    ...form, // Spread the original form object to keep existing keys
     title: form.title || '',
     hide: hideArray,
     labels: form.labels || {},
@@ -307,5 +335,16 @@ const ensureFormDefaults = (form = {}) => {
   };
 };
 
+const prepareRenderArrays = (Arrays, formMap) => {
+  return Object.entries(Arrays).reduce((acc, [key, arrayData]) => {
+    acc[key] = {
+      json: arrayData, // Original array data
+      settings: formMap[key]?.settings ? ensureSettingsDefaults(formMap[key].settings) : ensureSettingsDefaults(formMap[key]), // Use existing settings or ensure defaults
+    };
+    return acc;
+  }, {});
+};
 
-export {handleSettings, handleFormMap, createColumnDef, ensureFormDefaults, ensureSettingsDefaults, sendToFilemaker, sendObjectToFilemaker, validateIsArrayofObjects, validateIsArray, validateIsObject, formatCellValue, formatDate, toTitleCase, transformArrayToObjects};
+
+
+export {prepareRenderArrays, removeEmptyKeys, handleSettings, handleFormMap, createColumnDef, ensureFormDefaults, ensureSettingsDefaults, sendToFilemaker, sendObjectToFilemaker, validateIsArrayofObjects, validateIsArray, validateIsObject, formatCellValue, formatDate, toTitleCase, transformArrayToObjects};

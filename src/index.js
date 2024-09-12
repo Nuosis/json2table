@@ -111,8 +111,8 @@ loadApp({
   path:"{}Line", 
   json:qbObjectData,
   formMap: {
-    title: "Bill 202408020",
-    hide:["Allow","value","Custom","Exchange","HomeTotalAmt","EmailStatus","GlobalTaxCalculation","Linked","MetaData","PrintStatus","SyncToken","domain","sparse"],
+    title: "Invoice 202408020",
+    hide:["Allow","value","Balance","CustomField","Exchange","HomeTotalAmt","EmailStatus","GlobalTaxCalculation","Linked","MetaData","PrintStatus","SyncToken","domain","sparse"],
     labels: {
       'BillEmail.Address':'Email',
       'CustomerRef.name':'Customer',
@@ -124,9 +124,29 @@ loadApp({
     format: [
       {key:'GST',style:'currency$'},
       {key:'Total',style:'currency$'},
-      {key:'Date Issued',style:'dateYYYY-MM-DD'}
+      {key:'Date Issued',style:'dateYYYY-MM-DD'},
+      {key:'Due Date',style:'dateYYYY-MM-DD'}
     ],
-    //group: [{keys: ['Keys to Group'], title: 'Subtitle for group'}],
+    group: [
+      {
+        keys: [
+          'Customer',
+          'Email'
+        ], 
+        title: 'Info'
+      },
+      {
+        keys: [
+          'DocNumber',
+          'Id',
+          'Date Issued',
+          'DueDate',
+          'GST',
+          'Total'
+        ], 
+        title: 'Details'
+      }
+    ],
     Line: {
       settings:{
         hide:["Id","DetailType","LineNum","SalesItemLineDetail"],
@@ -136,7 +156,7 @@ loadApp({
           'SalesItemLineDetail.Qty':'Qty',
           'SalesItemLineDetail.UnitPrice':'Price'
         },
-        format:[{key:"Amount",style:"currency"},{key:"Price",style:"currency"}]
+        format:[{key:"Amount",style:"currency$"},{key:"Price",style:"currency$"}]
       }
     }
   }

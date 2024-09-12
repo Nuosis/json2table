@@ -6,9 +6,8 @@ import { handleSettings, ensureSettingsDefaults, sendToFilemaker, validateIsArra
 
 
 const DisplayJsonArrayOfObjects = ({ json, darkMode=false, ky}) => {
-  console.log(ky)
   const obj = toTitleCase(ky)
-  console.log(`jsonAoO Rendering ${ky}`)
+  console.log(`jsonAoO Rendering ${obj}`)
   //safety check
   if(!json){
     return(
@@ -57,11 +56,11 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, ky}) => {
       <Alert title="Invalid Format" dialog = {validateIsArrayofObjects(data).message} actionText="OK" />
     )
   }
-  console.log("data",data)
+  console.log("data: ",data)
 
   //HANDLE SETTINGS
   const columns = React.useMemo(() => handleSettings(data, settings), [data, settings.hide, settings.columnOrder, settings.format]);
-  console.log({columns})
+  console.log("columns: ",columns)
 
   //HANDLE SEARCHING
   useEffect(() => {

@@ -37,10 +37,14 @@ const App = ({ json }) => {
   if( assessStringType(path)==='array' ){
     settings=ensureSettingsDefaults(json.settings)
     transformedData = transformKeys(data,settings.labels,settings.omit)
+    console.log("Omit and Lables Transformed",transformedData)
     prop = {json:transformedData,path,settings}
   } else if (assessStringType(path)==='object') {
+    console.log(json.formMap)
     formMap=ensureFormDefaults(json.formMap)
+    console.log({formMap})
     transformedData = transformObjectKeys(data,formMap)
+    console.log("Omit and Lables Transformed",transformedData)
     prop = {json:transformedData,path,formMap}
   }
 

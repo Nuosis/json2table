@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import MyForm from "../../components/MyForm";
 import Alert from "../../components/Alert";
 import { handleFormMap, ensureFormDefaults, sendObjectToFilemaker, validateIsObject, toTitleCase } from "./utils";
@@ -6,7 +6,7 @@ import { handleFormMap, ensureFormDefaults, sendObjectToFilemaker, validateIsObj
 
 const DisplayJsonObject = ({ json, darkMode=false, ky}) => {
   const obj = ky ? toTitleCase(ky) : "";
-  console.log(`jsonObject Rendering`,{obj})
+  console.log(`jsonObject Rendering`,obj)
   //safety check
   if(!json){
     return(
@@ -16,9 +16,8 @@ const DisplayJsonObject = ({ json, darkMode=false, ky}) => {
   
 
   //set variables/state
-  const formMap = json.formMap ? ensureFormDefaults(json.formMap) : {};
+  const formMap = json.formMap;
   const data = json.json?json.json:json;
-  console.log({data})
 
   // Data checks
   if(!validateIsObject(data).isValid){

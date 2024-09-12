@@ -16,6 +16,8 @@ const assessJsonStructure = (value) => {
     return 'object'; // Single Object
   } else if (typeof value === 'string') {
     return 'string'; // String
+  } else if (typeof value === 'number') {
+    return 'number'; // String
   } else {
     return 'prim'; // Could be primitive types or empty structures
   }

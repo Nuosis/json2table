@@ -17,7 +17,7 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = 
     getSortedRowModel: getSortedRowModel(),  
     getExpandedRowModel: getExpandedRowModel(),  // Include expanded rows functionality
   });
-  //console.log({table})
+  console.log("MyTable:",{data, columns})
 
   // Handle row click
   const handleRowClick = (row) => {

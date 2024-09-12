@@ -6,14 +6,14 @@ import DisplayJsonArrayOfObjects from '../functions/display_json/DisplayJsonArra
 import DisplayJsonArray from '../functions/display_json/DisplayJsonArray'
 import DisplayJsonObject from '../functions/display_json/DisplayJsonObject'
 import { assessJsonStructure } from '../utils';
-import { handleFormMap, ensureFormDefaults, toTitleCase } from '../functions/display_json/utils';
+import { removeEmptyKeys, handleFormMap, ensureFormDefaults, ensureSettingsDefaults, handleSettings, toTitleCase, prepareRenderArrays } from '../functions/display_json/utils';
 
 const MyForm = ({ data, callback, darkMode = false, formMap, obj }) => {
   // Destructure the processed data
   const { renderObj } = data;  
   
   // Separate arrays of objects from renderObj
-  const [renderArrays, renderObjects] = Object.entries(renderObj).reduce(
+  const [renderArrs, renderObjs] = Object.entries(renderObj).reduce(
     ([arrays, objects], [key, value]) => {
       const nestedEntries = Object.entries(value).filter(([_, nestedValue]) => {
         // Identify arrays of objects
@@ -34,9 +34,13 @@ const MyForm = ({ data, callback, darkMode = false, formMap, obj }) => {
     [{}, {}]
   );
 
+  //MANAGE OBJ PREP
+  const renderObjects = removeEmptyKeys(renderObjs)
+  
+  //MANAGE ARRAY PREP
+  const renderArrays = prepareRenderArrays(renderArrs, formMap)
 
   console.log({renderArrays,renderObjects})
-
 
   // Handle Item click (if needed for future use)
   const handleItemClick = (dataObj, clickedItem) => {
@@ -46,7 +50,7 @@ const MyForm = ({ data, callback, darkMode = false, formMap, obj }) => {
   };
 
   // Determine the grid column class based on the number of keys
-  const numberOfKeys = Object.keys(renderObj).length;
+  const numberOfKeys = Object.keys(renderObjects).length;
   let gridClass;
   if (numberOfKeys === 2) {
     gridClass = 'grid-cols-1';
@@ -88,7 +92,7 @@ const MyForm = ({ data, callback, darkMode = false, formMap, obj }) => {
         </div>
         {expanded && (
           <div className={`mt-2 ${window.innerWidth >= 768 ? 'lg:grid-cols-2' : 'grid-cols-1'}`}>
-            <DisplayJsonArray json={data} darkMode={darkMode} ky={ky} />
+            <DisplayJsonArrayOfObjects json={data} darkMode={darkMode} ky={ky} />
           </div>
         )}
       </div>
@@ -172,7 +176,7 @@ const MyForm = ({ data, callback, darkMode = false, formMap, obj }) => {
                   ));
                 } else if (structureType === 'ooo') {
                   return <OooComponent ky={key} data={value} formMap={formMap} />;
-                } else if (structureType === 'string') {
+                } else if (structureType === 'string' || structureType === 'number' ) {
                   return <Field ky={key} value={value} groupTitle={groupTitle} />;
                 } else if (structureType === 'aoo') {
                   return <AooComponent ky={key} data={value} />;
