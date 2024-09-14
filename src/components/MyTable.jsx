@@ -6,18 +6,37 @@ import {
   getSortedRowModel,
   getExpandedRowModel,
 } from '@tanstack/react-table';
-import { handleExpandedRow } from './MyTable.Utils';
+import { handleExpandedRow, OooComponent, renderCellValue } from './MyTable.Utils';
+
+
 
 const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = false, obj }) => {
   //console.log("MyTable Called")
+  const refinedColumns = columns.map((col) => ({
+    ...col,
+    cell: (cellData) => {
+      const value = cellData[col.accessorKey];
+      
+      // Check if value is an object and render OooComponent if it is
+      if (typeof value === 'object' && value !== null) {
+        return <OooComponent ky={col.accessorKey} data={value} darkMode={darkMode} />;
+      }
+
+      // If it's not an object, render it as is
+      return <span>{value}</span>;
+    }
+  }));
+
   const table = useReactTable({
     data,
-    columns,
+    columns: refinedColumns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),  
     getExpandedRowModel: getExpandedRowModel(),  // Include expanded rows functionality
   });
-  console.log("MyTable:",{data, columns})
+  console.log("MyTable:",{data, refinedColumns})
+
+
 
   // Handle row click
   const handleRowClick = (row) => {
@@ -25,11 +44,6 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = 
       callback(row.original);
     }
   };
-  
-  const isNaNValue = (value) => {
-    return value === null || value === undefined || value === '' || value === '$NaN' || value === 'NaN' || (typeof value === 'number' && isNaN(value));
-  };
-
 
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -79,9 +93,7 @@ const MyTable = ({ data, columns, callback, darkMode = false, searchBarMargin = 
                     color: darkMode ? '#cbd5e0' : '#2d3748',
                   }}
                 >
-                {isNaNValue(cell.getValue())
-                  ? ''
-                  : flexRender(cell.column.columnDef.cell, cell.getContext())}
+                {renderCellValue(cell,darkMode)}
                 </td>
               ))}
             </tr>

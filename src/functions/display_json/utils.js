@@ -80,8 +80,12 @@ const formatDate = (value, format) => {
 };
 
 const formatCellValue = (value, formatStyle) => {
-  //console.log("formatCellValue",{value, formatStyle})
+  console.log("Formatting value:", value, "with formatStyle:", formatStyle);
   if (!formatStyle) return value; // No format specified, return value as is
+
+  if (Array.isArray(value)) {
+    value = value.length > 0 ? value[0] : ''; // Handle empty arrays gracefully
+  }
 
   if (formatStyle.startsWith('decimal')) {
     const decimalPlaces = parseInt(formatStyle.replace('decimal', ''), 10);
@@ -89,6 +93,7 @@ const formatCellValue = (value, formatStyle) => {
       return parseFloat(value).toFixed(decimalPlaces);
     }
   }
+
 
   if (formatStyle.startsWith('date')) {
     const dateFormat = formatStyle.replace('date', '').trim();
@@ -154,6 +159,7 @@ const createColumnDef = (key, formatStyle, labels) => ({
   enableSorting: true,
   cell: info => {
     const value = info.getValue();
+    console.log("Rendering value:", value, "with formatStyle:", formatStyle);
     const row = info.row;
     
     // Handle array case - if the first element is an object, convert it to a string or select a property
@@ -192,7 +198,7 @@ const createColumnDef = (key, formatStyle, labels) => ({
 
 const handleSettings = (data, settings) => {
   const { hide = [], columnOrder = [], format = [], labels = {} } = settings;
-
+  console.log("format: ",format)
   // Create a lookup map for formatting
   const formatMap = format.reduce((acc, { key, style }) => {
     acc[key] = style;
@@ -222,8 +228,10 @@ const handleSettings = (data, settings) => {
     const firstColumnKey = finalColumns[0].accessorKey;
 
     data.sort((a, b) => {
-      if (a[firstColumnKey] < b[firstColumnKey]) return -1;
-      if (a[firstColumnKey] > b[firstColumnKey]) return 1;
+      const aVal = isNaN(a[firstColumnKey]) ? a[firstColumnKey] : Number(a[firstColumnKey]);
+      const bVal = isNaN(b[firstColumnKey]) ? b[firstColumnKey] : Number(b[firstColumnKey]);
+      if (aVal < bVal) return -1;
+      if (aVal > bVal) return 1;
       return 0;
     });
   }
@@ -322,6 +330,12 @@ const ensureFormDefaults = (form = {}) => {
   const hideArray = form.hide || [];
   if (!hideArray.includes('id')) {
     hideArray.push('id');
+  }
+  if (!hideArray.includes('Id')) {
+    hideArray.push('Id');
+  }
+  if (!hideArray.includes('ID')) {
+    hideArray.push('ID');
   }
 
   return {

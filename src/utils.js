@@ -13,11 +13,11 @@ const assessJsonStructure = (value) => {
     if (allObjects) {
       return 'ooo'; // Object of Objects
     }
-    return 'object'; // Single Object
+    return 'object';
   } else if (typeof value === 'string') {
-    return 'string'; // String
+    return 'string';
   } else if (typeof value === 'number') {
-    return 'number'; // String
+    return 'number';
   } else {
     return 'prim'; // Could be primitive types or empty structures
   }

@@ -16,7 +16,7 @@ const DisplayJsonObject = ({ json, darkMode=false, ky}) => {
   
 
   //set variables/state
-  const formMap = json.formMap;
+  const formMap = ensureFormDefaults(json.formMap);
   const data = json.json?json.json:json;
 
   // Data checks
@@ -35,7 +35,7 @@ const DisplayJsonObject = ({ json, darkMode=false, ky}) => {
   return (
     <div className="h-screen" >
       <div id="2" className="flex-grow overflow-auto">
-        <MyForm formMap={formMap} data={processedData} callback={sendObjectToFilemaker} darkMode={darkMode} obj={ky} />
+        <MyForm initialFormMap={formMap} initialData={processedData} callback={sendObjectToFilemaker} darkMode={darkMode} obj={ky} />
       </div>
     </div>
   );

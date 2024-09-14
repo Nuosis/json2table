@@ -1,0 +1,24 @@
+[
+	{
+		"Amount" : 163.18,
+		"Description" : "Codename Entertainment on WS Main",
+		"DetailType" : "SalesItemLineDetail",
+		"Id" : "44",
+		"LineNum" : 43,
+		"SalesItemLineDetail" : 
+		{
+			"ItemRef" : 
+			{
+				"name" : "Cleaning Income:Commercial Cleaning:Regular Clean:Regular Clean Sales",
+				"value" : "2"
+			},
+			"Qty" : 1,
+			"ServiceDate" : "2024-09-01",
+			"TaxCodeRef" : 
+			{
+				"value" : "4"
+			},
+			"UnitPrice" : 163.18
+		}
+	}
+]

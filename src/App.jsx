@@ -8,7 +8,30 @@ import { assessJsonStructure,extractNestedObject,transformKeys,transformObjectKe
 import {ensureSettingsDefaults,ensureFormDefaults} from "./functions/display_json/utils"
 
 const App = ({ json }) => {
-  const { path, data=json.json } = json;
+  let { path } = json;
+  const d= json.json?json.json:json
+  let route=path
+  let data
+  console.log("App called:",{json})
+
+  const dataType=assessJsonStructure(d)
+  if(dataType==='aoo'&&d.length===1){
+    data=d[0] //is array has only one row cset data to contents of the row
+  } else {
+    data=d
+  }
+
+  if(!path){
+    route=assessJsonStructure(data)
+    if(route==="aoo"){route='array',path='[0]'}
+    if(route==="ooo"){route='object'.path='{}'}
+    if(route==="array"){path='[0]'}
+    if(route==="object"){path='{}'}
+  } else {
+    route=assessStringType(path)
+  }
+
+  console.log({path},{route},{data})
 
   // DARK MODE
   const [prefersDarkMode, setPrefersDarkMode] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -33,16 +56,16 @@ const App = ({ json }) => {
   let transformedData
   let prop
 
-
-  if( assessStringType(path)==='array' ){
+  // ASSIGN APP ROUTE
+  if( route==='array' ){
     settings=ensureSettingsDefaults(json.settings)
     transformedData = transformKeys(data,settings.labels,settings.omit)
     console.log("Omit and Lables Transformed",transformedData)
     prop = {json:transformedData,path,settings}
-  } else if (assessStringType(path)==='object') {
-    console.log(json.formMap)
+  } else if (route==='object') {
+    //console.log(json.formMap)
     formMap=ensureFormDefaults(json.formMap)
-    console.log({formMap})
+    //console.log({formMap})
     transformedData = transformObjectKeys(data,formMap)
     console.log("Omit and Lables Transformed",transformedData)
     prop = {json:transformedData,path,formMap}
@@ -50,17 +73,17 @@ const App = ({ json }) => {
 
   // PATH
   switch (true) {
-    case typeof path === "string" && assessJsonStructure(transformedData)=== "aoo":
+    case assessJsonStructure(transformedData)=== "aoo":
       obj=extractNestedObject(path);
       console.log("displayJsonArrayOfObjects called...",transformedData,obj);
       return <DisplayJsonArrayOfObjects json={prop} darkMode={prefersDarkMode} ky={obj} />;
 
-    case typeof path === "string" && assessJsonStructure(transformedData)=== "array":
+    case assessJsonStructure(transformedData)=== "array":
       obj=extractNestedObject(path);
       console.log("displayJsonArray called...",{obj});
       return <DisplayJsonArray json={prop} darkMode={prefersDarkMode} ky={obj} />;
 
-    case typeof path === "string" && assessJsonStructure(transformedData)=== "object":
+    case assessJsonStructure(transformedData)=== "object" || assessJsonStructure(transformedData)=== "ooo":
       obj=extractNestedObject(path);
       console.log("displayJsonObject called...");
       return <DisplayJsonObject json={prop} darkMode={prefersDarkMode} ky={obj}/>;

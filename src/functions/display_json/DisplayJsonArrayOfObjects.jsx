@@ -5,7 +5,7 @@ import SimpleInput from "../../components/Input";
 import { handleSettings, ensureSettingsDefaults, sendToFilemaker, validateIsArrayofObjects, toTitleCase } from "./utils";
 
 
-const DisplayJsonArrayOfObjects = ({ json, darkMode=false, ky}) => {
+const DisplayJsonArrayOfObjects = ({ json, darkMode=false, ky, parentPath=ky}) => {
   const obj = toTitleCase(ky)
   console.log(`jsonAoO Rendering ${obj}`)
   //safety check
@@ -18,7 +18,6 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, ky}) => {
   //set variables/state
   const settings = ensureSettingsDefaults(json.settings)
   const [searchValue, setSearchValue] = useState(settings.initialSearch || '');
-  const [filteredData, setFilteredData] = useState([]);
 
 
   const rawData = json.json?json.json:json;
@@ -62,6 +61,9 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, ky}) => {
   const columns = React.useMemo(() => handleSettings(data, settings), [data, settings.hide, settings.columnOrder, settings.format]);
   console.log("columns: ",columns)
 
+  // Initialize filteredData with data
+  const [filteredData, setFilteredData] = useState(data);
+
   //HANDLE SEARCHING
   useEffect(() => {
     if (searchValue !== undefined && searchValue !== null) {
@@ -93,7 +95,7 @@ const DisplayJsonArrayOfObjects = ({ json, darkMode=false, ky}) => {
         </div>
       </div>
       <div id="2" className="flex-grow overflow-auto">
-        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode} obj={ky} />
+        <MyTable data={filteredData} columns={columns} callback={sendToFilemaker} darkMode={darkMode} parentPath={ky} />
       </div>
     </div>
   );

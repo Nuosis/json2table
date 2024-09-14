@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiChevronRight, FiChevronDown } from 'react-icons/fi'; // Import icons from react-icons
 
-const Accordion = ({ title, children, darkMode = false }) => {
+const Accordion = ({ ky, title, children, darkMode = false }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -17,7 +17,7 @@ const Accordion = ({ title, children, darkMode = false }) => {
         </span>
       </div>
       {isOpen && (
-        <div className="mt-4">
+        <div key={ky} className="mt-4">
           {children}
         </div>
       )}

@@ -6,9 +6,12 @@ import data2 from "./test_data/data2.json"
 import arrayData from "./test_data/array.json"
 import qbObjectData from "./test_data/qbObject.json"
 import qboLines from "./test_data/qbLines.json"
+import qboLine from "./test_data/qbLine.json"
 import object from "./test_data/object.json"
 import object2 from "./test_data/object2.json"
 
+// Initialize the root as a property on the window object
+window.root = null;
 
 function jsonPrep(json){
   console.log("jsonPrep Init...",{json})
@@ -31,20 +34,28 @@ window.loadApp = (json) => {
   } else {
     data = json
   }
-  console.log("App Init...")
 
   const container = document.getElementById("root");
-  const root = createRoot(container);
-  root.render(<App json={data} />);
+  // If the root hasn't been created yet, create it
+  if (!window.root) {
+    window.root = createRoot(container);
+    console.log("App Init...");
+  } else {
+    console.log("Recalling App...");
+  }
+
+  window.root.render(<App json={data} />);
 };
 
-console.log("version 1.0.3", {
+  
+
+console.log("version 1.0.7", {
   FUNCTIONS: [
     {
       Name: "loadApp",
       props: [
         {
-          path: "dataType: [0] && 'keyToRender'||{} && 'keyToRender'",
+          path: "dataType: [0] && 'keyToRender'||{} && 'keyToRender'", //optional
           json: {/* theJsonDataToDisplay */},
           settings: {
             hide: ['keys to hide'],
@@ -71,7 +82,7 @@ console.log("version 1.0.3", {
 
 //loadApp({path:"[0]fieldData", json:data, settings:{hide:["_","~","f_","E16","OBSI","db"],initialSearch:'',columnOrder:["Name","Email","phone"],format:[{key:"chargeRate",style:"currency"},{key:"fundsAvailable",style:"currency"}],labels: {'chargeRate':'Rate'}}})
 //loadApp({path:"[0]customers", json:data2, settings:{columnOrder:["Name","Email"]}})
-//loadApp({path:"[0]emails", json:arrayData})
+//loadApp({json:qboLine})
 
 //OBJECT
 // loadApp({
@@ -107,57 +118,57 @@ console.log("version 1.0.3", {
 //     format:[{key:"Amount",style:"currency"},{key:"Price",style:"currency"}]
 //   }
 // })
-loadApp({
-  path:"{}Line", 
-  json:qbObjectData,
-  formMap: {
-    title: "Invoice 202408020",
-    hide:["Allow","value","Balance","CustomField","Exchange","HomeTotalAmt","EmailStatus","GlobalTaxCalculation","Linked","MetaData","PrintStatus","SyncToken","domain","sparse"],
-    labels: {
-      'BillEmail.Address':'Email',
-      'CustomerRef.name':'Customer',
-      'TxnTaxDetail.TotalTax':'GST',
-      'TxnDate':'Date Issued',
-      'TotalAmt':'Total'
-    },
-    omit: ['CurrencyRef','CustomerRef','TxnTaxDetail','ShipAddr'],
-    format: [
-      {key:'GST',style:'currency$'},
-      {key:'Total',style:'currency$'},
-      {key:'Date Issued',style:'dateYYYY-MM-DD'},
-      {key:'Due Date',style:'dateYYYY-MM-DD'}
-    ],
-    group: [
-      {
-        keys: [
-          'Customer',
-          'Email'
-        ], 
-        title: 'Info'
-      },
-      {
-        keys: [
-          'DocNumber',
-          'Id',
-          'Date Issued',
-          'DueDate',
-          'GST',
-          'Total'
-        ], 
-        title: 'Details'
-      }
-    ],
-    Line: {
-      settings:{
-        hide:["Id","DetailType","LineNum","SalesItemLineDetail"],
-        omit:["SalesItemLineDetail"],
-        columnOrder:["Description","Qty","Price","Amount"],
-        labels: {
-          'SalesItemLineDetail.Qty':'Qty',
-          'SalesItemLineDetail.UnitPrice':'Price'
-        },
-        format:[{key:"Amount",style:"currency$"},{key:"Price",style:"currency$"}]
-      }
-    }
-  }
-})
+// loadApp({
+//   path:"{}Line", 
+//   json:qbObjectData,
+//   formMap: {
+//     title: "Invoice 202408020",
+//     hide:["Allow","value","Balance","CustomField","Exchange","HomeTotalAmt","EmailStatus","GlobalTaxCalculation","Linked","MetaData","PrintStatus","SyncToken","domain","sparse"],
+//     labels: {
+//       'BillEmail.Address':'Email',
+//       'CustomerRef.name':'Customer',
+//       'TxnTaxDetail.TotalTax':'GST',
+//       'TxnDate':'Date Issued',
+//       'TotalAmt':'Total'
+//     },
+//     omit: ['CurrencyRef','CustomerRef','TxnTaxDetail','ShipAddr'],
+//     format: [
+//       {key:'GST',style:'currency$'},
+//       {key:'Total',style:'currency$'},
+//       {key:'Date Issued',style:'dateYYYY-MM-DD'},
+//       {key:'Due Date',style:'dateYYYY-MM-DD'}
+//     ],
+//     group: [
+//       {
+//         keys: [
+//           'Customer',
+//           'Email'
+//         ], 
+//         title: 'Info'
+//       },
+//       {
+//         keys: [
+//           'DocNumber',
+//           'Id',
+//           'Date Issued',
+//           'DueDate',
+//           'GST',
+//           'Total'
+//         ], 
+//         title: 'Details'
+//       }
+//     ],
+//     Line: {
+//       settings:{
+//         hide:["Id","DetailType","LineNum","SalesItemLineDetail"],
+//         omit:["SalesItemLineDetail"],
+//         columnOrder:["Description","Qty","Price","Amount"],
+//         labels: {
+//           'SalesItemLineDetail.Qty':'Qty',
+//           'SalesItemLineDetail.UnitPrice':'Price'
+//         },
+//         format:[{key:"Amount",style:"currency$"},{key:"Price",style:"currency$"}]
+//       }
+//     }
+//   }
+// })
